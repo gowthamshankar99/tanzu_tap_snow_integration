@@ -1,0 +1,88 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  creationTimestamp: "2022-08-03T01:27:02Z"
+  generation: 1
+  labels:
+    apps.tanzu.vmware.com/pipeline: snow
+  name: snow-pipeline
+  namespace: default
+  resourceVersion: "782764997"
+  uid: cb6a540c-7431-4a90-b1a6-3469fadcca3b
+spec:
+  params:
+  - name: source-url
+    type: string
+  - name: source-revision
+    type: string
+  tasks:
+  - name: test
+    params:
+    - name: source-url
+      value: $(params.source-url)
+    - name: source-revision
+      value: $(params.source-revision)
+    taskSpec:
+      metadata: {}
+      params:
+      - name: source-url
+        type: string
+      - name: source-revision
+        type: string
+      spec: null
+      steps:
+      - image: dwdraju/alpine-curl-jq
+        name: test
+        resources: {}
+        script: |-
+          IP=$(curl "https://dev129536.service-now.com/api/now/table/incident" \
+          --request POST \
+          --header "Accept:application/json" \
+          --header "Content-Type:application/json" \
+          --data "{'short_description':'Approval created by Tanzu SupplyChain','assignment_group':'287ebd7da9fe198100f92cc8d1d2154e','urgency':'2','impact':'2'}" \
+          --user 'admin':'/NuAmfEk72*Z')
+
+          echo "snow ticket created successfully"
+
+          STATE=$(echo $IP | jq '.result.state')
+          INCIDENT_NUMBER=$(echo $IP | jq '.result.number')
+          SYS_ID=$(echo $IP | jq '.result.sys_id')
+
+          FINAL_SYS_ID=${SYS_ID//['"']/}
+
+          echo $STATE
+          echo $INCIDENT_NUMBER
+          echo $SYS_ID
+
+          while :
+          do
+            echo "state before get is $STATE"
+            
+            GET_RESPONSE=$(curl https://dev129536.service-now.com/api/now/table/incident/$FINAL_SYS_ID \
+            --request GET \
+            --header "Accept:application/json" \
+            --header "Content-Type:application/json" \
+            --user 'admin':'/NuAmfEk72*Z')
+
+            echo $GET_RESPONSE
+
+            STATE=$(echo $GET_RESPONSE | jq '.result.state')
+            STATE=$(echo ${STATE:1:1})
+            if [ $STATE -eq 6 ]
+            then 
+               echo "state check pased"
+               break
+            else
+               echo "state check failed"
+            fi 
+
+            
+
+            echo "test echo"
+            echo "current state is $STATE" 
+
+            sleep 10
+
+          done
+
+

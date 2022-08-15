@@ -1,0 +1,47 @@
+---
+apiVersion: carto.run/v1alpha1
+kind: ClusterSupplyChain
+metadata:
+  name: snow-approval-supplychain
+spec:
+  selector:
+    apps.tanzu.vmware.com/workload-type: test-supply-chain
+  resources:
+    - name: source-provider
+      templateRef:
+        kind: ClusterSourceTemplate
+        name: workload-git-repository
+
+    - name: snow-approval-step
+      templateRef:
+         kind: ClusterSourceTemplate
+         name: snow-testing-pipeline
+      sources:
+        - resource: source-provider
+          name: source         
+
+    - name: image-builder
+      templateRef:
+        kind: ClusterImageTemplate
+        name: workload-kpack-image
+      sources:
+        - resource: snow-approval-step
+          name: source   
+
+    - name: DeploymentCreator
+      templateRef:
+        kind: ClusterTemplate
+        name: knative-deployer 
+      images:
+        - resource: image-builder 
+          name: image
+
+
+
+#
+# supplychain 
+#     clustersourcetemplate
+#           runnable
+#                 ref: clusterruntemplate
+#                           pipelinerun
+#                                pipeline
