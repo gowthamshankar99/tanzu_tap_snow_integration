@@ -35,12 +35,12 @@ spec:
         name: test
         resources: {}
         script: |-
-          IP=$(curl "https://dev129536.service-now.com/api/now/table/incident" \
+          IP=$(curl "https://<instance-name>.service-now.com/api/now/table/incident" \
           --request POST \
           --header "Accept:application/json" \
           --header "Content-Type:application/json" \
           --data "{'short_description':'Approval created by Tanzu SupplyChain','assignment_group':'287ebd7da9fe198100f92cc8d1d2154e','urgency':'2','impact':'2'}" \
-          --user 'admin':'/NuAmfEk72*Z')
+          --user '<user>':'<pw>')
 
           echo "snow ticket created successfully"
 
@@ -58,11 +58,11 @@ spec:
           do
             echo "state before get is $STATE"
             
-            GET_RESPONSE=$(curl https://dev129536.service-now.com/api/now/table/incident/$FINAL_SYS_ID \
+            GET_RESPONSE=$(curl https://<instance-name>.service-now.com/api/now/table/incident/$FINAL_SYS_ID \
             --request GET \
             --header "Accept:application/json" \
             --header "Content-Type:application/json" \
-            --user 'admin':'/NuAmfEk72*Z')
+            --user '<user>':'<pw>')
 
             echo $GET_RESPONSE
 
