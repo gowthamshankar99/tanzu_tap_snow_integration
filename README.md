@@ -7,6 +7,12 @@ In this Gist, we will look at integrating TAP with external tools like ServiceNo
 
 For the purpose of this Demo - We took the liberty to integrate TAP Supply chain with the Snow's **Incident** module. However integrating with other modules like ChangeRequest, RITM, Task follows the same pattern. The only change would be to update the API call to point to the other modules.
 
+## PreReqs
+
+* K8s Cluster with Tanzu Application Platform 1.2 Installed
+
+* Running SNOW Dev Instance - A Dev Instance can be spun up [here](https://developer.servicenow.com/dev.do).
+
 ## Does this work for other integrations ?
 
 Yes, this integration is not limited to just ServiceNow - the tekton scripts attached to gist will work with any rest api. All thats required is to update the respective API before kicking off the supply chain.
