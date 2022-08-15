@@ -1,3 +1,6 @@
+#
+# The snow instance username, instance name, password needs to be updated in the below script. 
+#
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
