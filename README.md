@@ -39,7 +39,7 @@ The above scripts are available in the github repo linked [here](https://github.
 
 ## Test the Integration 
 
- * Submit the workload pointing to the label selector of the new custom supply chain referencing the snow integration
+ * Submit the workload pointing to the label selector of the new custom supply chain referencing the snow integration. Link on how to submit your first workload is [here](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.2/tap/GUID-getting-started-deploy-first-app.html).
  
  * Access the tap-gui to see if the step is waiting for the snow approval 
  
